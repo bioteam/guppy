@@ -242,8 +242,7 @@ export const getGQLFilter = (filterObj) => {
       // This filter only has a combine setting so far. We can ignore it.
       return;
     } else {
-      console.error(filterValues);
-      throw new Error('Invalid filter object');
+      throw new Error(`Invalid filter object ${filterValues}`);
     }
     if (fieldSplitted.length > 1) { // nested field
       fieldSplitted.pop();

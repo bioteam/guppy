@@ -1,8 +1,7 @@
-FROM quay.io/cdis/ubuntu:20.04
+FROM quay.io/cdis/ubuntu:16.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# need libcap2-bin so we can do setcap later
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         ca-certificates \
@@ -10,11 +9,11 @@ RUN apt-get update \
         git \
         sudo \
         vim \
-        libcap2-bin \
-    && curl -sL https://deb.nodesource.com/setup_14.x | bash - \
+    && curl -sL https://deb.nodesource.com/setup_10.x | bash - \ 
     && apt-get install -y --no-install-recommends nodejs \
     && rm -rf /var/lib/apt/lists/* \
-    && npm install -g npm@8
+    && npm install -g npm@7.8.0 \
+    && npm config set maxsockets 5
 
 COPY . /guppy/
 WORKDIR /guppy
@@ -34,4 +33,5 @@ RUN npm run-script prepare
 EXPOSE 3000
 EXPOSE 80
 
-CMD bash ./startServer.sh
+CMD node --max-http-header-size 16000 dist/server/server.js
+
