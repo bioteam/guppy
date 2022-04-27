@@ -28,6 +28,23 @@ const getSingleFilterOption = (histogramResult, initHistogramRes, filterValuesTo
     });
     return rangeOptions;
   }
+
+  // if this is for a date range slider
+  if (histogramResult.histogram.length > 0) {
+    const firstKey = histogramResult.histogram[0].key;
+    const validDateFormat = firstKey.search(/\d{4}-\d{2}-\d{2}/i);
+    if (validDateFormat === 0 && Date.parse(firstKey)) {
+      const dates = histogramResult.histogram.map((item) => item.key);
+      const validDates = dates.filter((date) => !Number.isNaN(Date.parse(date)));
+      validDates.sort((a, b) => Date.parse(a) - Date.parse(b));
+      const dateRangeOptions = {
+        filterType: 'dateRange',
+        dates: validDates,
+      };
+      return [dateRangeOptions];
+    }
+  }
+
   let rawtextOptions = histogramResult.histogram;
   // hide filterValuesToHide from filters
   // filterValuesToHide added to guppyConfig in data-portal
