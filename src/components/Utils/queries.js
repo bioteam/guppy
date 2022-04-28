@@ -306,7 +306,7 @@ export const askGuppyForRawData = (
   filter,
   sort,
   offset = 0,
-  size = 20,
+  size = 200,
   accessibility = 'all',
   format,
 ) => {
